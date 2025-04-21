@@ -1,24 +1,26 @@
 using UnityEngine;
 
-public class CameraFollow : MonoBehaviour
+public class MainCamera : MonoBehaviour
 {
-    public Transform player;
-    private float highestY;
+    public float scrollSpeed = 0.1f; // Speed at which the camera moves up
+    private bool startScrolling = false;
 
     void Start()
     {
-        if (player != null)
-            highestY = player.position.y;
+        StartCoroutine(DelayedStart());
+    }
+
+    System.Collections.IEnumerator DelayedStart()
+    {
+        yield return new WaitForSeconds(2f);
+        startScrolling = true;
     }
 
     void LateUpdate()
     {
-        if (player == null) return;
-
-        if (player.position.y > highestY)
+        if (startScrolling)
         {
-            highestY = player.position.y;
-            transform.position = new Vector3(transform.position.x, highestY, transform.position.z);
+            transform.position += Vector3.up * scrollSpeed * Time.deltaTime;
         }
     }
 }

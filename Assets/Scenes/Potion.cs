@@ -3,56 +3,44 @@ using UnityEngine;
 public class Potion : MonoBehaviour
 {
     private bool isHeld = false;
-    private Transform holdPoint;
     private Rigidbody2D rb;
+    private Collider2D col;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        Debug.Log("Potion rigidbody is " + (rb.simulated ? "simulated" : "not simulated"));
+        col = GetComponent<Collider2D>();
     }
 
     void Update()
     {
-        // Follow the HoldPoint while held
-        if (isHeld && holdPoint != null)
+        if (isHeld && transform.parent != null)
         {
-            transform.position = holdPoint.position;
+            transform.position = transform.parent.position;
 
-            // Drop potion with Enter/Return
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                isHeld = false;
-                transform.SetParent(null);
-                rb.simulated = true;
-                Debug.Log("Potion dropped!");
+                Drop();
             }
         }
     }
 
-    void OnTriggerStay2D(Collider2D other)
+    public void PickUp(Transform holdPoint)
     {
-        Debug.Log("Near player");
+        isHeld = true;
+        transform.SetParent(holdPoint);
+        rb.isKinematic = true;
+        col.enabled = false;
+        Debug.Log("Potion picked up!");
+    }
 
-        if (!isHeld && other.CompareTag("Player"))
-        {
-            if (Input.GetKeyDown(KeyCode.Return))
-            {
-                holdPoint = other.transform.Find("HoldPoint");
-
-                if (holdPoint != null)
-                {
-                    isHeld = true;
-                    transform.SetParent(holdPoint);
-                    rb.simulated = false;
-                    Debug.Log("Potion picked up!");
-                }
-                else
-                {
-                    Debug.LogWarning("HoldPoint not found on Player!");
-                }
-            }
-        }
+    public void Drop()
+    {
+        isHeld = false;
+        transform.SetParent(null);
+        rb.isKinematic = false;
+        col.enabled = true;
+        Debug.Log("Potion dropped!");
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -61,7 +49,6 @@ public class Potion : MonoBehaviour
         {
             Debug.Log("Potion delivered!");
 
-            // Add score when potion hits the cauldron
             PlayerController player = FindObjectOfType<PlayerController>();
             if (player != null)
             {

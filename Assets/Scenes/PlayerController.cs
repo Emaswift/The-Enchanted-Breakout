@@ -10,6 +10,21 @@ public class PlayerController : MonoBehaviour
 
     public int score = 0;
     public Text scoreText;
+    
+    public int hearts = 3;
+
+    public void LoseHeart()
+    {
+        hearts--;
+        Debug.Log("Ouch! Hearts left: " + hearts);
+
+        if (hearts <= 0)
+        {
+            Debug.Log("Game Over!");
+            // Trigger game over logic here
+        }
+    }
+
 
     void Start()
     {
