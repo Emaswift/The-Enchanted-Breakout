@@ -1,32 +1,26 @@
 using UnityEngine;
 
+using UnityEngine;
+
+[RequireComponent(typeof(Rigidbody2D))]
 public class CauldronController : MonoBehaviour
 {
-    public Camera mainCam;
-    public float yOffsetFromBottom = 1f;
-    public float leftEdgeX = -5f;
-    public float moveSpeed = 1f;
-    public float moveRange = 6f;
+    public float moveSpeed = 5f;
+    private Rigidbody2D rb;
 
     void Start()
     {
-        if (mainCam == null)
-        {
-            mainCam = Camera.main;
-        }
-
-        // Start at the left edge
-        transform.position = new Vector3(leftEdgeX, transform.position.y, transform.position.z);
+        rb = GetComponent<Rigidbody2D>();
+        rb.gravityScale = 0f; // So it doesn't fall
+        rb.linearVelocity = Vector2.right * moveSpeed;
     }
 
-    void Update()
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        // Stick to bottom of the camera
-        float camBottomY = mainCam.transform.position.y - mainCam.orthographicSize + yOffsetFromBottom;
-
-        // Horizontal ping-pong motion starting from left
-        float x = leftEdgeX + Mathf.PingPong(Time.time * moveSpeed, moveRange);
-
-        transform.position = new Vector3(x, camBottomY, transform.position.z);
+        if (collision.gameObject.name == "EdgeLeft" || collision.gameObject.name == "EdgeRight")
+        {
+            // Reverse direction
+            rb.linearVelocity = new Vector2(-rb.linearVelocity.x, rb.linearVelocity.y);
+        }
     }
 }

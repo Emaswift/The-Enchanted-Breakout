@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Potion : MonoBehaviour
@@ -57,6 +58,12 @@ public class Potion : MonoBehaviour
 
             Destroy(gameObject);
         }
+    }
+
+    private void OnMouseDown()
+    {
+        //write code here so when princess presses the mouse button she will pick it up and when let go it will drop
+        
     }
 }
 

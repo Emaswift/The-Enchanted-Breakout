@@ -10,8 +10,10 @@ public class PlayerController : MonoBehaviour
 
     public int score = 0;
     public Text scoreText;
-    
+
     public int hearts = 3;
+
+    private bool isFacingRight = true; // <-- New: track direction
 
     public void LoseHeart()
     {
@@ -25,7 +27,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -35,12 +36,33 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         float moveInput = Input.GetAxis("Horizontal");
-        rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y); // fixed from "linearVelocity"
 
+        // Move player
+        rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y); // Fixed: should be velocity
+
+        // Flip sprite if needed
+        if (moveInput > 0 && !isFacingRight)
+        {
+            Flip();
+        }
+        else if (moveInput < 0 && isFacingRight)
+        {
+            Flip();
+        }
+
+        // Jump
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce); // fixed here too
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         }
+    }
+
+    void Flip()
+    {
+        isFacingRight = !isFacingRight;
+        Vector3 scale = transform.localScale;
+        scale.x *= -1; // Mirror sprite horizontally
+        transform.localScale = scale;
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -64,7 +86,6 @@ public class PlayerController : MonoBehaviour
 
     void UpdateScoreUI()
     {
-        if (scoreText != null)
-            scoreText.text = "Potions: " + score.ToString();
+        scoreText.text = "Potions: " + score.ToString();
     }
 }
