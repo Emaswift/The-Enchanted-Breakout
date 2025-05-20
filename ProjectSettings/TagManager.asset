@@ -19,7 +19,7 @@ TagManager:
   - Platform
   - Player
   - Rat
-  - 
+  - Potion
   - 
   - 
   - 
@@ -43,6 +43,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 2382666519
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

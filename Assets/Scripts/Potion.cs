@@ -44,22 +44,6 @@ public class Potion : MonoBehaviour
         Debug.Log("Potion dropped!");
     }
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (!isHeld && other.CompareTag("Cauldron"))
-        {
-            Debug.Log("Potion delivered!");
-
-            PlayerController player = FindObjectOfType<PlayerController>();
-            if (player != null)
-            {
-                player.AddScore(1);
-            }
-
-            Destroy(gameObject);
-        }
-    }
-
     private void OnMouseDown()
     {
         //write code here so when princess presses the mouse button she will pick it up and when let go it will drop

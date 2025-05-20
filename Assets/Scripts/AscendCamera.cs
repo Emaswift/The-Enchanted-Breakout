@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MainCamera : MonoBehaviour
+public class AscendCamera : MonoBehaviour
 {
     public float scrollSpeed = 0.1f; // Speed at which the camera moves up
     private bool startScrolling = false;
